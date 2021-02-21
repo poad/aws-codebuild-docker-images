@@ -1,0 +1,44 @@
+name: Docker build and push
+ 
+on:
+  push:
+    branches:
+    - master 
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron:  '0 0 * * 2'
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+    - name: "Build"
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      run: |
+        cd ubuntu/standard/5.0 && \
+        docker build -t poad/aws/codebuild/standard:3.0 .
+
+  docker_push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      if: github.event_name != 'pull_request'
+    - name: Login to Public ECR
+      uses: docker/login-action@v1
+      with:
+        registry: public.ecr.aws
+        username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      env:
+        AWS_REGION: us-east-1
+    - name: Build and push
+      if: github.event_name != 'pull_request'
+      run: |
+        cd ubuntu/standard/5.0 && \
+        IMAGRE_NAME=public.ecr.aws/n6l7u3t1/aws-codebuild-docker-images:3.0 && \
+        docker build -t ${IMAGRE_NAME} . && \
+        docker push ${IMAGRE_NAME}
