@@ -314,7 +314,7 @@ ENV JAVA_11_HOME="/opt/jvm/openjdk-11" \
     GRADLE_PATH="$SRC_DIR/gradle" \
     ANDROID_SDK_MANAGER_VER="6858069" \
     ANDROID_SDK_BUILD_TOOLS="build-tools;30.0.3" \
-    ANDROID_SDK_PLATFORM_TOOLS="platforms;android-29" \
+    ANDROID_SDK_PLATFORM_TOOLS="platforms;android-30" \
     ANDROID_SDK_BUILD_TOOLS_29="build-tools;29.0.2" \
     ANDROID_SDK_PLATFORM_TOOLS_29="platforms;android-29" \
     ANDROID_SDK_BUILD_TOOLS_28="build-tools;28.0.3" \
@@ -351,7 +351,7 @@ RUN set -ex \
 
     # Install Android SDK manager
 RUN set -ex \
-    && wget "https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_MANAGER_VER}.zip" -O /tmp/android-sdkmanager.zip \
+    && wget "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_MANAGER_VER}.zip" -O /tmp/android-sdkmanager.zip \
     && echo "${ANDROID_SDK_MANAGER_SHA256} /tmp/android-sdkmanager.zip" | sha256sum -c - \
     && mkdir -p ${ANDROID_HOME} \
     && unzip /tmp/android-sdkmanager.zip -d ${ANDROID_HOME} \
