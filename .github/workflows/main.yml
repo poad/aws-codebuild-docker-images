@@ -38,7 +38,7 @@ jobs:
     - name: Build and push
       if: github.event_name != 'pull_request'
       run: |
-        cd ubuntu/standard/5.0 && \
+        cd ubuntu/standard/3.0 && \
         IMAGRE_NAME=public.ecr.aws/n6l7u3t1/aws-codebuild-docker-images:3.0 && \
         docker build -t ${IMAGRE_NAME} . && \
         docker push ${IMAGRE_NAME}
