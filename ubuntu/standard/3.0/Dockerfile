@@ -351,7 +351,7 @@ RUN set -ex \
 
     # Install Android SDK manager
 RUN set -ex \
-    && wget "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_MANAGER_VER}.zip" -O /tmp/android-sdkmanager.zip \
+    && wget "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_MANAGER_VER}_latest.zip" -O /tmp/android-sdkmanager.zip \
     && echo "${ANDROID_SDK_MANAGER_SHA256} /tmp/android-sdkmanager.zip" | sha256sum -c - \
     && mkdir -p ${ANDROID_HOME} \
     && unzip /tmp/android-sdkmanager.zip -d ${ANDROID_HOME} \
