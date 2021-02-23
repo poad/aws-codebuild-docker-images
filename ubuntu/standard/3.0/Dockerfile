@@ -331,7 +331,11 @@ ENV JDK_DOWNLOAD_TAR="openjdk-${JDK_VERSION}_linux-x64_bin.tar.gz" \
     JDK_HOME="$JDK_11_HOME" \
     JRE_HOME="$JRE_11_HOME"
 
-ENV PATH="${PATH}:/opt/tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools"
+ENV ANDROID_SDK_HOME="${ANDROID_HOME}" \
+    ANDROID_SDK_ROOT="${ANDROID_HOME}" \
+    ANDROID_SDK="${ANDROID_HOME}"
+
+ENV PATH="${PATH}:/opt/tools:${ANDROID_HOME}/cmdline-tools/latest:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools"
 
 RUN set -ex \
     && apt-get update \
@@ -355,9 +359,11 @@ RUN set -ex \
     && echo "${ANDROID_SDK_MANAGER_SHA256} /tmp/android-sdkmanager.zip" | sha256sum -c - \
     && mkdir -p ${ANDROID_HOME} \
     && unzip /tmp/android-sdkmanager.zip -d ${ANDROID_HOME} \
+    && mv ${ANDROID_HOME}/cmdline-tools ${ANDROID_HOME}/latest \
+    && mkdir -p ${ANDROID_HOME}/cmdline-tools \
+    && mv ${ANDROID_HOME}/latest ${ANDROID_HOME}/cmdline-tools \
     && rm /tmp/android-sdkmanager.zip \
     && chown -R root.root ${ANDROID_HOME} \
-    && ln -s ${ANDROID_HOME}/tools/android /usr/bin/android \
     # Install Android
     && android-accept-licenses.sh "env JAVA_HOME=$JAVA_8_HOME JRE_HOME=$JRE_8_HOME JDK_HOME=$JDK_8_HOME sdkmanager --verbose platform-tools ${ANDROID_SDK_BUILD_TOOLS} ${ANDROID_SDK_PLATFORM_TOOLS} ${ANDROID_SDK_EXTRAS} ${ANDROID_SDK_NDK_TOOLS}" \
     && android-accept-licenses.sh "env JAVA_HOME=$JAVA_8_HOME JRE_HOME=$JRE_8_HOME JDK_HOME=$JDK_8_HOME sdkmanager --verbose platform-tools ${ANDROID_SDK_BUILD_TOOLS_28} ${ANDROID_SDK_PLATFORM_TOOLS_28}" \
